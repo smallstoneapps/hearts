@@ -1,0 +1,7 @@
+build/
+node_modules/
+src/js/coverage/
+.floo
+.flooignore
+.lock-*
+npm-debug.log
