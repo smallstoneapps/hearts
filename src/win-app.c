@@ -2,7 +2,7 @@
 
 #include "libs/pebble-assist/pebble-assist.h"
 #include "libs/bitmap-loader/bitmap-loader.h"
-#include "libs/chart/src/pebble_chart.h"
+// #include "libs/chart/src/pebble_chart.h"
 #include "apps.h"
 
 static void window_load(Window* window);

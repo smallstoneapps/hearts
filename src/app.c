@@ -42,8 +42,8 @@ static void received_callback(DictionaryIterator *iterator, void *context) {
     alert_show_sticky(window_stack_get_top_window(), "Updating!", "The app is updating.");
   }
   else if (strcmp(tuple_op->value->cstring, "DATA") == 0) {
+    alert_cancel();
     apps_load(tuple_data->value->cstring);
     win_menu_reload();
   }
-  alert_cancel();
 }
