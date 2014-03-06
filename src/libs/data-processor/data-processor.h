@@ -12,3 +12,4 @@ uint8_t data_processor_count(void);
 bool data_processor_get_string(char** str);
 bool data_processor_get_bool(bool* boolean);
 bool data_processor_get_uint8(uint8_t* num);
+bool data_processor_get_uint16(uint16_t* num);

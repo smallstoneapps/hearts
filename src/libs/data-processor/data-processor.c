@@ -58,3 +58,11 @@ bool data_processor_get_uint8(uint8_t* num) {
   free(tmp_str);
   return true;
 }
+
+bool data_processor_get_uint16(uint16_t* num) {
+  char* tmp_str;
+  data_processor_get_string(&tmp_str);
+  *num = atoi(tmp_str);
+  free(tmp_str);
+  return true; 
+}
