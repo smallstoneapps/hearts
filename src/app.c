@@ -1,6 +1,6 @@
 #include <pebble.h>
-#include "lib/pebble-assist/pebble-assist.h"
-#include "lib/alert/src/alert.h"
+#include "libs/pebble-assist/pebble-assist.h"
+#include "libs/alert/src/alert.h"
 #include "win-app.h"
 #include "win-menu.h"
 #include "generated/appinfo.h"

@@ -1,5 +1,5 @@
 #include <pebble.h>
-#include "lib/data-processor/data-processor.h"
+#include "libs/data-processor/data-processor.h"
 #include "apps.h"
 
 static uint8_t num_apps = 0;

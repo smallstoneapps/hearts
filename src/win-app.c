@@ -1,8 +1,8 @@
 #include <pebble.h>
 
-#include "lib/pebble-assist/pebble-assist.h"
-#include "lib/bitmap-loader/bitmap-loader.h"
-#include "lib/chart/src/pebble_chart.h"
+#include "libs/pebble-assist/pebble-assist.h"
+#include "libs/bitmap-loader/bitmap-loader.h"
+#include "libs/chart/src/pebble_chart.h"
 #include "apps.h"
 
 static void window_load(Window* window);

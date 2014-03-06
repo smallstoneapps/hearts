@@ -1,5 +1,5 @@
 #include <pebble.h>
-#include "lib/pebble-assist/pebble-assist.h"
+#include "libs/pebble-assist/pebble-assist.h"
 #include "win-menu.h"
 #include "win-app.h"
 #include "apps.h"
