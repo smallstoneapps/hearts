@@ -68,7 +68,9 @@ static void alert_end(void *data)
 	layer_remove_from_parent(text_layer_get_layer(alert_lib_body_layer));
 
 	//Incase of repeat
-	app_timer_cancel(alert_lib_timer);
+	if (alert_lib_timer != NULL) {
+		app_timer_cancel(alert_lib_timer);
+	}
 
 	alert_lib_is_visible = false;
 }
@@ -135,11 +137,17 @@ void alert_show(Window *window, const char *title, const char *body, const int d
 		snprintf(alert_lib_body_buffer, (alert_strlen(body) * sizeof(char) + 1), "%s", body);
 		text_layer_set_text(alert_lib_body_layer, alert_lib_body_buffer);
 
-		//Register timer
-		alert_lib_timer = app_timer_register(duration, alert_end, NULL);
+		if (duration >= 0) {
+			//Register timer
+			alert_lib_timer = app_timer_register(duration, alert_end, NULL);
+		}
 
 		alert_lib_is_visible = true;
 	}
+}
+
+void alert_show_sticky(Window *window, const char *title, const char *body) {
+	alert_show(window, title, body, -1);
 }
 
 /*
