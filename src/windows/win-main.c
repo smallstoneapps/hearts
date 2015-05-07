@@ -89,9 +89,11 @@ void win_main_show(void) {
 
 void win_main_reload(void) {
   s_app_info = app_info_list[s_app_position];
-  layer_mark_dirty(s_layer_count);
-  layer_mark_dirty(s_layer_name);
-  layer_mark_dirty(s_layer_dots);
+  if (win_main_visible()) {
+    layer_mark_dirty(s_layer_count);
+    layer_mark_dirty(s_layer_name);
+    layer_mark_dirty(s_layer_dots);
+  }
 }
 
 bool win_main_visible(void) {
