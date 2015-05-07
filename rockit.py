@@ -66,35 +66,35 @@ def build(ctx, js_path=None):
 
 def includes(ctx):
     include_folders = []
-    libs = ctx.path.find_node('./libs')
+    libs = ctx.path.find_node('./lib')
     for folder in libs.listdir():
         data = __get_data(folder)
         if 'includes' not in data:
             waflib.Logs.pprint(
                 'RED',
                 'Error: Rockit could not find "includes" in {}'
-                .format(os.path.join('libs', folder, 'rockit.json')))
+                .format(os.path.join('lib', folder, 'rockit.json')))
             return []
         for include in data['includes']:
             include_folders.append(
                 os.path.normpath(
-                    os.path.join('libs', folder, include)).encode('utf-8'))
+                    os.path.join('lib', folder, include)).encode('utf-8'))
     return include_folders
 
 
 def sources(ctx):
     source_files = []
-    libs = ctx.path.find_node('./libs')
+    libs = ctx.path.find_node('./lib')
     for folder in libs.listdir():
         data = __get_data(folder)
         for file in data['sources']:
             source_files.append(
                 os.path.normpath(
-                    os.path.join('libs', folder, file)).encode('utf-8'))
+                    os.path.join('lib', folder, file)).encode('utf-8'))
     return source_files
 
 
 def __get_data(folder):
-    rockit_file = os.path.join('libs', folder, 'rockit.json')
+    rockit_file = os.path.join('lib', folder, 'rockit.json')
     json_data = open(rockit_file).read()
     return json.loads(json_data)

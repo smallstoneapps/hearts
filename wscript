@@ -33,11 +33,11 @@
 import json
 import datetime
 import os
-from sh import karma
+# from sh import karma
 from sh import uglifyjs
 from sh import jshint
 from sh import jscs
-from sh import make
+# from sh impo/rt make
 import rockit
 
 top = '.'
