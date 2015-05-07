@@ -55,6 +55,9 @@ void win_setup_init(void) {
     .load = window_load,
     .unload = window_unload
   });
+  #ifdef PBL_SDK_2
+  window_set_fullscreen(s_window, true);
+  #endif
 }
 
 void win_setup_deinit(void) {
