@@ -10,9 +10,9 @@ this app.
 
 --
 
-<img src="https://raw.githubusercontent.com/smallstoneapps/hearts/master/store/4.0/screenshot_basalt_01.png" width="19%" alt="Pebble Screenshot #1" />
-<img src="https://raw.githubusercontent.com/smallstoneapps/hearts/master/store/4.0/screenshot_basalt_02.png" width="19%" alt="Pebble Screenshot #2" />
-<img src="https://raw.githubusercontent.com/smallstoneapps/hearts/master/store/4.0/screenshot_basalt_03.png" width="19%" alt="Pebble Screenshot #3" />
+![Pebble Screenshot #1](https://raw.githubusercontent.com/smallstoneapps/hearts/master/store/4.0/screenshot_basalt_01.png)
+![Pebble Screenshot #2](https://raw.githubusercontent.com/smallstoneapps/hearts/master/store/4.0/screenshot_basalt_02.png)
+![Pebble Screenshot #3](https://raw.githubusercontent.com/smallstoneapps/hearts/master/store/4.0/screenshot_basalt_03.png)
 
 [appstore]: https://apps.getpebble.com/applications/530be07a7cd17c954e000049
 [travis]: https://travis-ci.org/smallstoneapps/hearts/
