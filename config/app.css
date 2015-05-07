@@ -1,0 +1,19 @@
+body {
+  padding-top: 70px;
+}
+
+.navbar-hearts {
+  background-color: #aa0000;
+  border-color: #aa0000;
+  background-image: url('logo.png');
+  background-repeat: no-repeat;
+  padding-left: 50px;
+}
+
+h3 {
+  margin-bottom: 0;
+}
+
+h5 {
+  margin-top: 0;
+}
