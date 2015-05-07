@@ -1,39 +1,210 @@
+#
+# Hearts Pebble App v4.0
+#
+# ----------------------
+#
+# The MIT License (MIT)
+#
+# Copyright © 2013 - 2015 Matthew Tole
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+# --------------------
+#
+# wscript
+#
 
-#
-# This file is the default set of rules to compile a Pebble project.
-#
-# Feel free to customize this to your needs.
-#
-
-import os.path
+import json
+import datetime
+import os
+from sh import karma
+from sh import uglifyjs
+from sh import jshint
+from sh import jscs
+from sh import make
+import rockit
 
 top = '.'
 out = 'build'
 
+
 def options(ctx):
     ctx.load('pebble_sdk')
+
 
 def configure(ctx):
     ctx.load('pebble_sdk')
 
+
+def distclean(ctx):
+    ctx.load('pebble_sdk')
+    try:
+        os.remove('../src/js/pebble-js-app.js')
+        os.remove('../src/js/src/generated/appinfo.js')
+        os.remove('../src/generated/appinfo.h')
+    except OSError:
+        pass
+
+
 def build(ctx):
     ctx.load('pebble_sdk')
 
-    build_worker = os.path.exists('worker_src')
-    binaries = []
+    js_libs = [
+        '../src/js/libs/superagent.js',
+        '../src/js/libs/message-queue.js',
+        '../src/js/libs/gcolor.js',
+        '../src/js/libs/store.js'
+    ]
 
-    for p in ctx.env.TARGET_PLATFORMS:
-        ctx.set_env(ctx.all_envs[p])
-        app_elf='{}/pebble-app.elf'.format(ctx.env.BUILD_DIR)
-        ctx.pbl_program(source=ctx.path.ant_glob('src/**/*.c'),
-        target=app_elf)
+    js_sources = [
+        '../src/js/src/generated/appinfo.js',
+        '../src/js/src/hacks.js',
+        '../src/js/src/main.js'
+    ]
+    built_js = '../src/js/pebble-js-app.js'
 
-        if build_worker:
-            worker_elf='{}/pebble-worker.elf'.format(ctx.env.BUILD_DIR)
-            binaries.append({'platform': p, 'app_elf': app_elf, 'worker_elf': worker_elf})
-            ctx.pbl_worker(source=ctx.path.ant_glob('worker_src/**/*.c'),
-            target=worker_elf)
-        else:
-            binaries.append({'platform': p, 'app_elf': app_elf})
+    # Generate appinfo.js
+    ctx(rule=generate_appinfo_js, source='../appinfo.json',
+        target='../src/js/src/generated/appinfo.js')
 
-    ctx.pbl_bundle(binaries=binaries, js=ctx.path.ant_glob('src/js/**/*.js'))
+    # Generate appinfo.h
+    ctx(rule=generate_appinfo_h, source='../appinfo.json',
+        target='../src/generated/appinfo.h')
+
+    # Run the C tests.
+    ctx(rule=make_test)
+
+    # Run jshint on all the JavaScript files
+    ctx(rule=js_jshint, source=js_sources)
+
+    # Run jscs on all the JavaScript files
+    ctx(rule=js_jscs, source=js_sources)
+
+    # Run the suite of JS tests.
+    # ctx(rule=js_karma)
+
+    # Combine the source JS files into a single JS file.
+    ctx(rule=concatenate_js,
+        source=' '.join(js_libs + js_sources),
+        target=built_js)
+
+    # Use Rockit to build the app
+    rockit.build(ctx, built_js)
+
+
+def generate_appinfo_h(task):
+    task.ext_out = '.c'
+
+    src = task.inputs[0].abspath()
+    target = task.outputs[0].abspath()
+    appinfo = json.load(open(src))
+
+    f = open(target, 'w')
+    write_comment_header(f, 'src/generated/appinfo.h', appinfo)
+    f.write('#pragma once\n\n')
+    f.write('#define VERSION_LABEL "{0}"\n'.format(appinfo['versionLabel']))
+    f.write('#define UUID "{0}"\n'.format(appinfo['uuid']))
+    for key in appinfo['appKeys']:
+        f.write('#define APP_KEY_{0} {1}\n'.format(key.upper(),
+                                                   appinfo['appKeys'][key]))
+    f.close()
+
+
+def generate_appinfo_js(task):
+    src = task.inputs[0].abspath()
+    target = task.outputs[0].abspath()
+    data = open(src).read().strip()
+    appinfo = json.load(open(src))
+
+    f = open(target, 'w')
+    write_comment_header(f, 'src/js/src/generated/appinfo.js', appinfo)
+    f.write('/* exported AppInfo */\n\n')
+    f.write('var AppInfo = ')
+    f.write(data)
+    f.write(';')
+    f.close()
+
+
+# Function to write the comment header for both the C and JS generated files.
+# Thank goodness that they have the same comment syntax!
+def write_comment_header(f, filename, appinfo):
+    f.write("""/*
+
+Hearts Pebble App v{0}
+
+----------------------
+
+The MIT License (MIT)
+
+Copyright © {1} Matthew Tole
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--------------------
+
+{2}
+
+*/
+
+
+""".format(appinfo['versionLabel'], datetime.datetime.now().year, filename))
+
+
+def concatenate_js(task):
+    task.ext_out = '.js'
+
+    inputs = (input.abspath() for input in task.inputs)
+    uglifyjs(*inputs, o=task.outputs[0].abspath(), b=True, indent_level=2)
+
+
+def make_test(task):
+    make()
+
+
+def js_jshint(task):
+    task.ext_out = '.js'
+    inputs = (input.abspath() for input in task.inputs)
+    jshint(*inputs, config=".jshintrc")
+
+
+def js_jscs(task):
+    task.ext_out = '.js'
+    inputs = (input.abspath() for input in task.inputs)
+    make("jscs")
+
+
+def js_karma(task):
+    task.ext_out = '.js'
+    karma("start", single_run=True, reporters="dots")

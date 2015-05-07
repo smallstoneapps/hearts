@@ -1,12 +1,14 @@
 /*
 
-Hearts Pebble App v4.0
+Pebble Tests
+A Pebble library for doing unit tests.
+http://smallstoneapps.github.io/pebble-tests/
 
 ----------------------
 
 The MIT License (MIT)
 
-Copyright © 2015 Matthew Tole
+Copyright © 2014 - 2015 Matthew Tole
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,15 +30,37 @@ THE SOFTWARE.
 
 --------------------
 
-src/generated/appinfo.h
+tests/unit.h
+
+This file is based on minunit.h, which was found here on
+http://www.jera.com/techinfo/jtns/jtn002.html as has been modified for my
+purposes.
 
 */
 
+#define mu_assert(test, message) do { \
+  if (!(test)) { \
+    return message; \
+  } \
+} while (0)
 
-#pragma once
+#define mu_test_group(group) do { \
+  char* message = group(); \
+  if (message) { \
+    return message ; \
+  } \
+} while (0)
 
-#define VERSION_LABEL "4.0"
-#define UUID "bcdef00a-b309-485d-b82f-341307693c73"
-#define APP_KEY_DATA 2
-#define APP_KEY_OPERATION 1
-#define APP_KEY_GROUP 0
+#define mu_run_test(test) do { \
+  before_each(); \
+  char *message = test(); \
+  after_each(); \
+  tests_run++; \
+  if (message) { \
+    return message; \
+  } \
+  tests_passed++; \
+} while (0)
+
+extern int tests_run;
+extern int tests_passed;

@@ -1,14 +1,12 @@
 /*
 
-Hearts v1.1
-
-http://matthewtole.com/pebble/hearts/
+Hearts Pebble App v4.0
 
 ----------------------
 
 The MIT License (MIT)
 
-Copyright © 2013 - 2015 Matthew Tole
+Copyright © 2015 Matthew Tole
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +32,7 @@ src/js/src/generated/appinfo.js
 
 */
 
+
 /* exported AppInfo */
 
 var AppInfo = {
@@ -41,25 +40,30 @@ var AppInfo = {
   "shortName": "Hearts",
   "longName": "Hearts",
   "companyName": "Matthew Tole",
+  "targetPlatforms": ["aplite", "basalt"],
+  "sdkVersion": "3",
   "versionCode": 2,
-  "versionLabel": "1.1",
+  "versionLabel": "4.0",
   "watchapp": {
     "watchface": false
   },
-  "appKeys": {},
-  "capabilities": [ "configurable" ],
+  "appKeys": {
+    "group": 0,
+    "operation": 1,
+    "data": 2
+  },
+  "capabilities": ["configurable"],
   "resources": {
     "media": [
       {
-        "menuIcon": true,
         "type": "png",
-        "name": "MENU",
-        "file": "heart_28.png"
+        "name": "ICON_PHONE",
+        "file": "images/phone.png"
       },
       {
         "type": "png",
-        "name": "BIG_HEART",
-        "file": "heart_big.png"
+        "name": "ICON_REFRESH",
+        "file": "images/refresh.png"
       }
     ]
   }

@@ -1,38 +1,30 @@
 {
-  "name": "hearts",
-  "version": "0.1.2",
-  "description": "Pebble app for displaying how many hearts your apps have on the Pebble appstore.",
-  "main": " ",
+  "name": "hearts-pebble",
+  "version": "4.0.0",
+  "description": "Hearts app for the Pebble smartwatch",
+  "private": true,
+  "main": "src/js/src/main.js",
   "scripts": {
-    "test": "karma start"
+    "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/smallstoneapps/hearts.git"
+    "url": "https://github.com/smallstoneapps/hearts.git"
   },
+  "keywords": [
+    "pebble",
+    "smartwatch"
+  ],
   "author": "Matthew Tole <pebble@matthewtole.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/smallstoneapps/hearts/issues"
   },
+  "homepage": "https://github.com/smallstoneapps/hearts",
   "devDependencies": {
-    "chai": "~1.9.0",
-    "karma-script-launcher": "~0.1.0",
-    "karma-chrome-launcher": "~0.1.2",
-    "karma-firefox-launcher": "~0.1.3",
-    "karma-html2js-preprocessor": "~0.1.0",
-    "karma-jasmine": "~0.1.5",
-    "karma-coffee-preprocessor": "~0.1.3",
-    "requirejs": "~2.1.11",
-    "karma-requirejs": "~0.2.1",
-    "karma-phantomjs-launcher": "~0.1.2",
-    "karma": "~0.10.9",
-    "karma-chai": "~0.1.0",
-    "mocha": "~1.17.1",
-    "karma-mocha": "~0.1.1",
-    "sinon": "~1.8.2",
-    "karma-sinon": "~1.0.2",
-    "karma-osx-reporter": "0.0.4",
-    "karma-coverage": "~0.2.0"
+    "jscs": "^1.13.1",
+    "jscs-stylish": "^0.3.1",
+    "jshint": "^2.7.0",
+    "jshint-stylish-ex": "^0.2.0"
   }
 }

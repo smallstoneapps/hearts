@@ -1,0 +1,12 @@
+{
+	"excludeFiles": ["src/js/src/generated/**"],
+	"preset": "airbnb",
+	"disallowSpacesInFunctionExpression": null,
+	"disallowSpacesInAnonymousFunctionExpression": null,
+	"requireSpacesInAnonymousFunctionExpression": {
+    "beforeOpeningRoundBrace": true,
+    "beforeOpeningCurlyBrace": true
+	},
+	"requirePaddingNewLinesAfterBlocks": null,
+	"maximumLineLength": 80
+}

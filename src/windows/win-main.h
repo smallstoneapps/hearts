@@ -28,15 +28,18 @@ THE SOFTWARE.
 
 --------------------
 
-src/generated/appinfo.h
+src/windows/win-main.h
 
 */
 
 
 #pragma once
 
-#define VERSION_LABEL "4.0"
-#define UUID "bcdef00a-b309-485d-b82f-341307693c73"
-#define APP_KEY_DATA 2
-#define APP_KEY_OPERATION 1
-#define APP_KEY_GROUP 0
+
+#include <pebble.h>
+
+void win_main_init(void);
+void win_main_deinit(void);
+void win_main_show(void);
+void win_main_reload(void);
+bool win_main_visible(void);
