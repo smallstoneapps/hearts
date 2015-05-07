@@ -1,3 +1,5 @@
+var returnTo = getQueryParam('return_to', 'pebblejs://close#');
+
 $('#btn-search').on('click', function (event) {
   event.preventDefault();
 
@@ -13,7 +15,7 @@ $('#btn-search').on('click', function (event) {
     }
     res.body.forEach(function (dev) {
       var $p = $('<h3/>');
-      var $a = $('<a/>').text(dev.name).attr('href', 'pebblejs://close#' + dev.id);
+      var $a = $('<a/>').text(dev.name).attr('href', returnTo + dev.id);
       var $small = $('<h5/>').addClass('small').text(dev.apps.join(', '));
       $p.append($a);
       $p.append($small);
@@ -21,3 +23,20 @@ $('#btn-search').on('click', function (event) {
     });
   });
 });
+
+
+// Something like this to get query variables.
+function getQueryParam(variable, defaultValue) {
+  // Find all URL parameters
+  var query = location.search.substring(1);
+  var vars = query.split('&');
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split('=');
+
+    // If the query variable parameter is found, decode it to use and return it for use
+    if (pair[0] === variable) {
+      return decodeURIComponent(pair[1]);
+    }
+  }
+  return defaultValue || false;
+}
