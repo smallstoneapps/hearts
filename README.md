@@ -6,7 +6,7 @@
 Keep track of how much people are loving your apps on the Pebble appstore with
 this app.
 
-[![Available on the Pebble appstore](http://pblweb.com/badge/530be07a7cd17c954e000049/white/small/)][appstore]
+[![Available on the Pebble appstore](http://pblweb.com/badge/530be07a7cd17c954e000049/white/medium/)][appstore]
 
 --
 
