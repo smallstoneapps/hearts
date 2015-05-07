@@ -55,6 +55,9 @@ Pebble.addEventListener('showConfiguration', function () {
 });
 
 Pebble.addEventListener('webviewclosed', function (event) {
+  if (event.response === 'CANCELLED') {
+    return;
+  }
   store.set('developerId', event.response);
   sendIsConfigured();
   updateHearts(store.get('developerId'), sendHearts);
@@ -91,7 +94,8 @@ function sendHearts(err, data) {
 }
 
 function updateHearts(developerId, callback) {
-  var url = sprintf(AppInfo.config.apiUrl, developerId);
+  var url = sprintf(AppInfo.settings.apiUrl, developerId);
+  console.log(url);
   superagent(url, function (err, res) {
     if (err) {
       return callback(err);

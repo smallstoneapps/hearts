@@ -69,6 +69,6 @@ var AppInfo = {
   },
   "settings": {
     "configUrl": "http://smallstoneapps.s3.amazonaws.com/hearts/config/index.html?version=%s",
-    "apiUrl": "'http://pblweb.com/api/v1/store/developers/%s.json"
+    "apiUrl": "http://pblweb.com/api/v1/store/developers/%s.json"
   }
 };
