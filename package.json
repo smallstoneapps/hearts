@@ -1,6 +1,6 @@
 {
   "name": "hearts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pebble app for displaying how many hearts your apps have on the Pebble appstore.",
   "main": " ",
   "scripts": {

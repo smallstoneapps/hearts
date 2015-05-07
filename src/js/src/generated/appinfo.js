@@ -1,6 +1,6 @@
 /*
 
-Hearts v0.1.2
+Hearts v1.1
 
 http://matthewtole.com/pebble/hearts/
 
@@ -8,7 +8,7 @@ http://matthewtole.com/pebble/hearts/
 
 The MIT License (MIT)
 
-Copyright © 2013 - 2014 Matthew Tole
+Copyright © 2013 - 2015 Matthew Tole
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,19 +30,37 @@ THE SOFTWARE.
 
 --------------------
 
-src/apps.h
+src/js/src/generated/appinfo.js
 
 */
 
-#pragma once
+/* exported AppInfo */
 
-#include <pebble.h>
-
-typedef struct App {
-  char* title;
-  uint16_t hearts;
-} App;
-
-uint8_t apps_count(void);
-App* apps_get(uint8_t pos);
-void apps_load(char* str);
+var AppInfo = {
+  "uuid": "bcdef00a-b309-485d-b82f-341307693c73",
+  "shortName": "Hearts",
+  "longName": "Hearts",
+  "companyName": "Matthew Tole",
+  "versionCode": 2,
+  "versionLabel": "1.1",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {},
+  "capabilities": [ "configurable" ],
+  "resources": {
+    "media": [
+      {
+        "menuIcon": true,
+        "type": "png",
+        "name": "MENU",
+        "file": "heart_28.png"
+      },
+      {
+        "type": "png",
+        "name": "BIG_HEART",
+        "file": "heart_big.png"
+      }
+    ]
+  }
+};

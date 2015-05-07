@@ -1,12 +1,16 @@
 /* globals Pebble */
 /* globals http */
 /* globals AppInfo */
+/* globals VersionChecker */
+/* globals Analytics */
 
 var Hearts = function () {
 
   var developerId = null;
+  var ga = null;
 
   Pebble.addEventListener('ready', function () {
+    ga = new Analytics('UA-48246810-2', AppInfo.shortName, AppInfo.versionLabel);
     developerId = window.localStorage.getItem('developerId', null);
     if (! developerId) {
       Pebble.sendAppMessage({ 0: 'CONFIGURE' });
@@ -15,13 +19,17 @@ var Hearts = function () {
       Pebble.sendAppMessage({ 0: 'UPDATING' });
       updateApps();
     }
+    VersionChecker.check(AppInfo);
   });
 
   Pebble.addEventListener('showConfiguration', function () {
+    trackEvent('config', 'shown');
     Pebble.openURL('http://pblweb.com/hearts/app/config/?version=' + AppInfo.versionLabel);
   });
 
+
   Pebble.addEventListener('webviewclosed', function (event) {
+    trackEvent('config', (event.response === 'CANCELLED') ? 'cancelled' : 'updated');
     if (event.response !== 'CANCELLED') {
       developerId = event.response;
       window.localStorage.setItem('developerId', developerId);
@@ -39,8 +47,15 @@ var Hearts = function () {
         dataArray.push(app.title);
         dataArray.push(app.hearts);
       });
+      trackEvent('api', 'update');
       Pebble.sendAppMessage({ 0: 'DATA', 1: dataArray.join('\n') });
     });
+  }
+
+  function trackEvent(name, data) {
+    if (ga) {
+      ga.trackEvent(name, data);
+    }
   }
 
 };

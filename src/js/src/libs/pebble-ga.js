@@ -33,6 +33,3 @@ Analytics.prototype.trackScreen = function (screenName) {
 Analytics.prototype.trackEvent = function (category, action) {
   this._trackGA('event', {'ec': category, 'ea': action});
 };
-
-// If require() will work some day. This would be nessecary.
-// module.exports.Analytics = Analytics;
