@@ -5,3 +5,4 @@ src/js/coverage/
 .flooignore
 .lock-*
 npm-debug.log
+*.pyc
