@@ -69,7 +69,8 @@ def build(ctx):
         '../src/js/libs/superagent.js',
         '../src/js/libs/message-queue.js',
         '../src/js/libs/gcolor.js',
-        '../src/js/libs/store.js'
+        '../src/js/libs/store.js',
+        '../src/js/libs/sprintf.js'
     ]
 
     js_sources = [

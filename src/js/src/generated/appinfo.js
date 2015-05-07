@@ -66,5 +66,9 @@ var AppInfo = {
         "file": "images/refresh.png"
       }
     ]
+  },
+  "settings": {
+    "configUrl": "http://192.168.0.7:8080/?version=%s",
+    "apiUrl": "'http://pblweb.com/api/v1/store/developers/%s.json"
   }
 };

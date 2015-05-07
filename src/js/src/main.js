@@ -35,6 +35,7 @@ src/js/src/main.js
 /* globals AppInfo */
 /* globals superagent */
 /* globals store */
+/* globals sprintf */
 
 Pebble.addEventListener('ready', function () {
   var msg = { group: 'BOOT', operation: 'BOOT', data: 'BOOT' };
@@ -50,8 +51,7 @@ Pebble.addEventListener('appmessage', function (event) {
 });
 
 Pebble.addEventListener('showConfiguration', function () {
-  Pebble.openURL('http://pblweb.com/hearts/app/config/?version=' +
-    AppInfo.versionLabel);
+  Pebble.openURL(sprintf(AppInfo.settings.configUrl, AppInfo.versionLabel));
 });
 
 Pebble.addEventListener('webviewclosed', function (event) {
@@ -91,8 +91,7 @@ function sendHearts(err, data) {
 }
 
 function updateHearts(developerId, callback) {
-  var url = 'http://pblweb.com/api/v1/store/developers/' +
-    developerId + '.json';
+  var url = sprintf(AppInfo.config.apiUrl, developerId);
   superagent(url, function (err, res) {
     if (err) {
       return callback(err);
