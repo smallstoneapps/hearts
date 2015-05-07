@@ -89,7 +89,9 @@ static void window_load(Window* window) {
 
   s_layer_bitmap = bitmap_layer_create(GRect(56, 50, 32, 51));
   bitmap_layer_set_bitmap(s_layer_bitmap, s_bitmap_phone);
+  #ifdef PBL_COLOR
   bitmap_layer_set_compositing_mode(s_layer_bitmap, GCompOpSet);
+  #endif
   bitmap_layer_add_to_window(s_layer_bitmap, s_window);
 }
 
