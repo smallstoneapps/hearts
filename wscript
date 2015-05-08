@@ -37,7 +37,7 @@ import os
 from sh import uglifyjs
 from sh import jshint
 from sh import jscs
-# from sh impo/rt make
+from sh import make
 import rockit
 
 top = '.'
