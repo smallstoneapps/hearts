@@ -1,6 +1,6 @@
 {
   "name": "hearts-pebble",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Hearts app for the Pebble smartwatch",
   "private": true,
   "main": "src/js/src/main.js",

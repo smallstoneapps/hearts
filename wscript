@@ -1,5 +1,5 @@
 #
-# Hearts Pebble App v4.0
+# Hearts Pebble App v5.0
 #
 # ----------------------
 #

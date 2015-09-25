@@ -1738,7 +1738,7 @@ module.exports = function(arr, fn, initial){
 },{}],6:[function(require,module,exports){
 /*
 
-Hearts Pebble App v4.0
+Hearts Pebble App v5.0
 
 ----------------------
 
@@ -1780,8 +1780,8 @@ module.exports = {
   "companyName": "Matthew Tole",
   "targetPlatforms": ["aplite", "basalt", "chalk"],
   "sdkVersion": "3",
-  "versionCode": 2,
-  "versionLabel": "4.0",
+  "versionCode": 1,
+  "versionLabel": "5.0",
   "watchapp": {
     "watchface": false
   },
@@ -1813,7 +1813,7 @@ module.exports = {
 },{}],7:[function(require,module,exports){
 /*
 
-Hearts Pebble App v4.0
+Hearts Pebble App v5.0
 
 ----------------------
 
@@ -1849,13 +1849,13 @@ src/js/src/hacks.js
 
 // superagent requires window.location to exist.
 if (!window.location) {
-  window.location = "";
+  window.location = '';
 }
 
 },{}],8:[function(require,module,exports){
 /*
 
-Hearts Pebble App v4.0
+Hearts Pebble App v5.0
 
 ----------------------
 

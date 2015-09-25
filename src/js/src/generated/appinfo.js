@@ -1,6 +1,6 @@
 /*
 
-Hearts Pebble App v4.0
+Hearts Pebble App v5.0
 
 ----------------------
 
@@ -42,8 +42,8 @@ module.exports = {
   "companyName": "Matthew Tole",
   "targetPlatforms": ["aplite", "basalt", "chalk"],
   "sdkVersion": "3",
-  "versionCode": 2,
-  "versionLabel": "4.0",
+  "versionCode": 1,
+  "versionLabel": "5.0",
   "watchapp": {
     "watchface": false
   },
