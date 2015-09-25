@@ -1,6 +1,6 @@
 /*
 
-Hearts Pebble App v5.0
+Hearts Pebble App v5.1
 
 ----------------------
 
@@ -35,7 +35,7 @@ src/generated/appinfo.h
 
 #pragma once
 
-#define VERSION_LABEL "5.0"
+#define VERSION_LABEL "5.1"
 #define UUID "bcdef00a-b309-485d-b82f-341307693c73"
 #define APP_KEY_DATA 2
 #define APP_KEY_OPERATION 1

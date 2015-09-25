@@ -1,6 +1,6 @@
 /*
 
-Hearts Pebble App v5.0
+Hearts Pebble App v5.1
 
 ----------------------
 
@@ -43,7 +43,7 @@ module.exports = {
   "targetPlatforms": ["aplite", "basalt", "chalk"],
   "sdkVersion": "3",
   "versionCode": 1,
-  "versionLabel": "5.0",
+  "versionLabel": "5.1",
   "watchapp": {
     "watchface": false
   },

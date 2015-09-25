@@ -4437,7 +4437,7 @@ typedef void (*AnimationSetupImplementation)(Animation *animation);
 //! the animation duration and the \ref AnimationCurve.
 //! For example, say an animation was scheduled at t = 1.0s, has a delay of 1.0s, a duration of 2.0s
 //! and a curve of AnimationCurveLinear. Then the .update callback will get called on t = 2.0s with
-//! distance_normalized = \ref ANIMATION_NORMALIZED_MIN. For each frame thereafter until t = 4.0s,
+//! distance_normalized = \ref ANIMATION_NORMALIZED_MIN. For each frame thereafter until t = v5.1s,
 //! the update callback will get called where distance_normalized is (\ref ANIMATION_NORMALIZED_MIN
 //! + (((\ref ANIMATION_NORMALIZED_MAX - \ref ANIMATION_NORMALIZED_MIN) * t) / duration)).
 //! Other system animation curve functions will result in a non-linear relation between

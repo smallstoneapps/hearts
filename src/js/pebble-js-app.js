@@ -1738,7 +1738,7 @@ module.exports = function(arr, fn, initial){
 },{}],6:[function(require,module,exports){
 /*
 
-Hearts Pebble App v5.0
+Hearts Pebble App v5.1
 
 ----------------------
 
@@ -1781,7 +1781,7 @@ module.exports = {
   "targetPlatforms": ["aplite", "basalt", "chalk"],
   "sdkVersion": "3",
   "versionCode": 1,
-  "versionLabel": "5.0",
+  "versionLabel": "5.1",
   "watchapp": {
     "watchface": false
   },
@@ -1813,7 +1813,7 @@ module.exports = {
 },{}],7:[function(require,module,exports){
 /*
 
-Hearts Pebble App v5.0
+Hearts Pebble App v5.1
 
 ----------------------
 
@@ -1855,7 +1855,7 @@ if (!window.location) {
 },{}],8:[function(require,module,exports){
 /*
 
-Hearts Pebble App v5.0
+Hearts Pebble App v5.1
 
 ----------------------
 
