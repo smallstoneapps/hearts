@@ -73,7 +73,10 @@ void win_loading_hide(void) {
 }
 
 static void window_load(Window* window) {
-  s_layer_text = text_layer_create(GRect(0, 134, 144, 20));
+  GSize window_size = layer_get_bounds(window_get_root_layer(window)).size;
+  GSize icon_size;
+
+  s_layer_text = text_layer_create(GRect(0, 134, window_size.w, 20));
   text_layer_set_font(s_layer_text, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
   text_layer_set_text(s_layer_text, "REFRESHING DATA");
   text_layer_set_text_color(s_layer_text, GColorWhite);
@@ -82,8 +85,9 @@ static void window_load(Window* window) {
   text_layer_add_to_window(s_layer_text, s_window);
 
   s_bitmap_refresh = gbitmap_create_with_resource(RESOURCE_ID_ICON_REFRESH);
+  icon_size = gbitmap_get_bounds(s_bitmap_refresh).size;
 
-  s_layer_bitmap = bitmap_layer_create(GRect(56, 60, 32, 32));
+  s_layer_bitmap = bitmap_layer_create(GRect(window_size.w / 2 - icon_size.w / 2, window_size.h / 2 - icon_size.h / 2, icon_size.w, icon_size.h));
   bitmap_layer_set_bitmap(s_layer_bitmap, s_bitmap_refresh);
   #ifdef PBL_COLOR
   bitmap_layer_set_compositing_mode(s_layer_bitmap, GCompOpSet);

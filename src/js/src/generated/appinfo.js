@@ -40,7 +40,7 @@ var AppInfo = {
   "shortName": "Hearts",
   "longName": "Hearts",
   "companyName": "Matthew Tole",
-  "targetPlatforms": ["aplite", "basalt"],
+  "targetPlatforms": ["aplite", "basalt", "chalk"],
   "sdkVersion": "3",
   "versionCode": 2,
   "versionLabel": "4.0",

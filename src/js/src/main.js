@@ -95,7 +95,6 @@ function sendHearts(err, data) {
 
 function updateHearts(developerId, callback) {
   var url = sprintf(AppInfo.settings.apiUrl, developerId);
-  console.log(url);
   superagent(url, function (err, res) {
     if (err) {
       return callback(err);

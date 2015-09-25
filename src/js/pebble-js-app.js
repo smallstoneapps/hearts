@@ -960,7 +960,7 @@ var GColor = function() {
                 if (get_type(arg) == "function") {
                     arg = arg();
                 }
-                if (re.not_string.test(match[8]) && re.not_json.test(match[8]) && get_type(arg) != "number" && isNaN(arg)) {
+                if (re.not_string.test(match[8]) && re.not_json.test(match[8]) && (get_type(arg) != "number" && isNaN(arg))) {
                     throw new TypeError(sprintf("[sprintf] expecting number but found %s", get_type(arg)));
                 }
                 if (re.number.test(match[8])) {
@@ -1104,7 +1104,7 @@ var AppInfo = {
     shortName: "Hearts",
     longName: "Hearts",
     companyName: "Matthew Tole",
-    targetPlatforms: [ "aplite", "basalt" ],
+    targetPlatforms: [ "aplite", "basalt", "chalk" ],
     sdkVersion: "3",
     versionCode: 2,
     versionLabel: "4.0",
@@ -1198,7 +1198,6 @@ function sendHearts(err, data) {
 
 function updateHearts(developerId, callback) {
     var url = sprintf(AppInfo.settings.apiUrl, developerId);
-    console.log(url);
     superagent(url, function(err, res) {
         if (err) {
             return callback(err);

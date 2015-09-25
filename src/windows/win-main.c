@@ -82,6 +82,7 @@ static AppInfo* s_app_info_new = NULL;
 static uint16_t s_name_offset = 0;
 static uint8_t s_animation_direction;
 static uint16_t s_dot_current_x = 0;
+static GSize s_window_size;
 
 
 void win_main_init(void) {
@@ -125,15 +126,17 @@ bool win_main_visible(void) {
 
 
 static void window_load(Window* window) {
-  s_layer_name = layer_create(GRect(0, 86, 144, 20));
+  s_window_size = layer_get_bounds(window_get_root_layer(window)).size;
+
+  s_layer_name = layer_create(GRect(0, 86, s_window_size.w, 20));
   layer_set_update_proc(s_layer_name, layer_update_name);
   layer_add_to_window(s_layer_name, window);
 
-  s_layer_count = layer_create(GRect(0, 46, 144, 44));
+  s_layer_count = layer_create(GRect(0, 46, s_window_size.w, 44));
   layer_set_update_proc(s_layer_count, layer_update_count);
   layer_add_to_window(s_layer_count, window);
 
-  s_layer_dots = layer_create(GRect(0, 140, 144, 12));
+  s_layer_dots = layer_create(GRect(0, 140, s_window_size.w, 12));
   layer_set_update_proc(s_layer_dots, layer_update_dots);
   layer_add_to_window(s_layer_dots, window);
 }
@@ -204,10 +207,10 @@ static void layer_update_name(Layer* layer, GContext* ctx) {
   if (s_is_animating) {
     graphics_draw_text(ctx, s_animation_direction == ANIMATION_DIRECTION_UP ? s_app_info_new->name : s_app_info_old->name,
       fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
-      GRect(0, 0 - s_name_offset, 144, 20), GTextOverflowModeFill, GTextAlignmentCenter, NULL);
+      GRect(0, 0 - s_name_offset, s_window_size.w, 20), GTextOverflowModeFill, GTextAlignmentCenter, NULL);
     graphics_draw_text(ctx, s_animation_direction == ANIMATION_DIRECTION_UP ? s_app_info_old->name : s_app_info_new->name,
       fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
-      GRect(0, 20 - s_name_offset, 144, 20), GTextOverflowModeFill, GTextAlignmentCenter, NULL);
+      GRect(0, 20 - s_name_offset, s_window_size.w, 20), GTextOverflowModeFill, GTextAlignmentCenter, NULL);
   }
   else {
     graphics_draw_text(ctx, s_app_info->name,
@@ -218,7 +221,7 @@ static void layer_update_name(Layer* layer, GContext* ctx) {
 
 static uint16_t dot_center_x(uint8_t pos) {
   uint16_t dots_width = (app_info_count * 11) + ((app_info_count - 1) * 5);
-  uint16_t start_x = (PEBBLE_WIDTH/2) - (dots_width/2);
+  uint16_t start_x = (s_window_size.w / 2) - (dots_width / 2);
   return start_x + 4 + (16 * pos);
 }
 
