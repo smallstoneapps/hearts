@@ -1778,7 +1778,7 @@ module.exports = {
   "shortName": "Hearts",
   "longName": "Hearts",
   "companyName": "Matthew Tole",
-  "targetPlatforms": ["basalt", "chalk"],
+  "targetPlatforms": ["aplite", "basalt", "chalk"],
   "sdkVersion": "3",
   "versionCode": 1,
   "versionLabel": "5.0",

@@ -68,8 +68,6 @@ static Window* s_window;
 static Layer* s_layer_count;
 static Layer* s_layer_name;
 static Layer* s_layer_dots;
-static Layer* s_indicator_up_layer;
-static Layer* s_indicator_down_layer;
 static AppInfo* s_app_info;
 static uint8_t s_app_position = 0;
 static uint8_t s_app_position_new = 0;
@@ -85,8 +83,13 @@ static uint16_t s_name_offset = 0;
 static uint8_t s_animation_direction;
 static uint16_t s_dot_current_x = 0;
 static GSize s_window_size;
+
+#ifdef PBL_SDK_3
+static Layer* s_indicator_up_layer;
+static Layer* s_indicator_down_layer;
 static ContentIndicator* s_indicator_up;
 static ContentIndicator* s_indicator_down;
+#endif
 
 void win_main_init(void) {
   s_window = window_create();
@@ -139,9 +142,11 @@ static void window_load(Window* window) {
   layer_set_update_proc(s_layer_count, layer_update_count);
   layer_add_to_window(s_layer_count, window);
 
-  s_layer_dots = layer_create(GRect(0, 120, s_window_size.w, 12));
+  s_layer_dots = layer_create(GRect(0, 130, s_window_size.w, 12));
   layer_set_update_proc(s_layer_dots, layer_update_dots);
   layer_add_to_window(s_layer_dots, window);
+
+#ifdef PBL_SDK_3
 
   s_indicator_up_layer = layer_create(GRect(0, 0,
     s_window_size.w, STATUS_BAR_LAYER_HEIGHT));
@@ -178,6 +183,7 @@ static void window_load(Window* window) {
 
   content_indicator_set_content_available(s_indicator_down, ContentIndicatorDirectionDown, true);
   content_indicator_set_content_available(s_indicator_up, ContentIndicatorDirectionUp, false);
+#endif
 }
 
 static void window_unload(Window* window) {
@@ -201,8 +207,10 @@ static void do_transition(void) {
   transition_animation_implementation.update = transition_animation_update;
   transition_animation_run(ANIMATION_DURATION, 0, &transition_animation_implementation, true);
 
+#ifdef PBL_SDK_3
   content_indicator_set_content_available(s_indicator_down, ContentIndicatorDirectionDown, s_app_position < (app_info_count - 1));
   content_indicator_set_content_available(s_indicator_up, ContentIndicatorDirectionUp, s_app_position > 0);
+#endif
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
