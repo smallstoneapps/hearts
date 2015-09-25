@@ -35,7 +35,7 @@ src/js/src/generated/appinfo.js
 
 /* exported AppInfo */
 
-var AppInfo = {
+module.exports = {
   "uuid": "bcdef00a-b309-485d-b82f-341307693c73",
   "shortName": "Hearts",
   "longName": "Hearts",

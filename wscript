@@ -33,12 +33,9 @@
 import json
 import datetime
 import os
-# from sh import karma
-from sh import uglifyjs
-from sh import jshint
-from sh import jscs
 from sh import make
 import rockit
+import sh
 
 top = '.'
 out = 'build'
@@ -78,6 +75,9 @@ def build(ctx):
         '../src/js/src/hacks.js',
         '../src/js/src/main.js'
     ]
+    if os.path.isfile('src/js/src/debug.js'):
+        js_sources.insert(0, '../src/js/src/debug.js');
+
     built_js = '../src/js/pebble-js-app.js'
 
     # Generate appinfo.js
@@ -91,18 +91,15 @@ def build(ctx):
     # Run the C tests.
     ctx(rule=make_test)
 
-    # Run jshint on all the JavaScript files
-    ctx(rule=js_jshint, source=js_sources)
-
-    # Run jscs on all the JavaScript files
-    ctx(rule=js_jscs, source=js_sources)
+    # Run ESLint on all the JavaScript files
+    ctx(rule=js_eslint, source=js_sources)
 
     # Run the suite of JS tests.
     # ctx(rule=js_karma)
 
     # Combine the source JS files into a single JS file.
     ctx(rule=concatenate_js,
-        source=' '.join(js_libs + js_sources),
+        source=js_sources,
         target=built_js)
 
     # Use Rockit to build the app
@@ -136,7 +133,7 @@ def generate_appinfo_js(task):
     f = open(target, 'w')
     write_comment_header(f, 'src/js/src/generated/appinfo.js', appinfo)
     f.write('/* exported AppInfo */\n\n')
-    f.write('var AppInfo = ')
+    f.write('module.exports = ')
     f.write(data)
     f.write(';')
     f.close()
@@ -186,26 +183,22 @@ THE SOFTWARE.
 def concatenate_js(task):
     task.ext_out = '.js'
 
-    inputs = (input.abspath() for input in task.inputs)
-    uglifyjs(*inputs, o=task.outputs[0].abspath(), b=True, indent_level=2)
+    browserify = sh.Command("./node_modules/.bin/browserify")
+    browserify(task.inputs[-1].abspath(), o=task.outputs[0].abspath())
 
 
 def make_test(task):
     make()
 
 
-def js_jshint(task):
+def js_eslint(task):
     task.ext_out = '.js'
-    inputs = (input.abspath() for input in task.inputs)
-    jshint(*inputs, config=".jshintrc")
 
-
-def js_jscs(task):
-    task.ext_out = '.js'
-    inputs = (input.abspath() for input in task.inputs)
-    make("jscs")
+    make('lint')
 
 
 def js_karma(task):
     task.ext_out = '.js'
+
+    karma = sh.Command("./node_modules/.bin/karma")
     karma("start", single_run=True, reporters="dots")
