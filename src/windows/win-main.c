@@ -68,6 +68,8 @@ static Window* s_window;
 static Layer* s_layer_count;
 static Layer* s_layer_name;
 static Layer* s_layer_dots;
+static Layer* s_indicator_up_layer;
+static Layer* s_indicator_down_layer;
 static AppInfo* s_app_info;
 static uint8_t s_app_position = 0;
 static uint8_t s_app_position_new = 0;
@@ -83,7 +85,8 @@ static uint16_t s_name_offset = 0;
 static uint8_t s_animation_direction;
 static uint16_t s_dot_current_x = 0;
 static GSize s_window_size;
-
+static ContentIndicator* s_indicator_up;
+static ContentIndicator* s_indicator_down;
 
 void win_main_init(void) {
   s_window = window_create();
@@ -136,9 +139,45 @@ static void window_load(Window* window) {
   layer_set_update_proc(s_layer_count, layer_update_count);
   layer_add_to_window(s_layer_count, window);
 
-  s_layer_dots = layer_create(GRect(0, 140, s_window_size.w, 12));
+  s_layer_dots = layer_create(GRect(0, 120, s_window_size.w, 12));
   layer_set_update_proc(s_layer_dots, layer_update_dots);
   layer_add_to_window(s_layer_dots, window);
+
+  s_indicator_up_layer = layer_create(GRect(0, 0,
+    s_window_size.w, STATUS_BAR_LAYER_HEIGHT));
+  s_indicator_down_layer = layer_create(GRect(0, s_window_size.h - STATUS_BAR_LAYER_HEIGHT,
+    s_window_size.w, STATUS_BAR_LAYER_HEIGHT));
+  layer_add_child(window_get_root_layer(window), s_indicator_up_layer);
+  layer_add_child(window_get_root_layer(window), s_indicator_down_layer);
+
+  s_indicator_up = content_indicator_create();
+  const ContentIndicatorConfig up_config = (ContentIndicatorConfig) {
+    .layer = s_indicator_up_layer,
+    .times_out = true,
+    .alignment = GAlignCenter,
+    .colors = {
+      .foreground = GColorWhite,
+      .background = COLOR_FALLBACK(GColorDarkCandyAppleRed, GColorBlack)
+    }
+  };
+  content_indicator_configure_direction(s_indicator_up, ContentIndicatorDirectionUp,
+                                        &up_config);
+
+  s_indicator_down = content_indicator_create();
+  const ContentIndicatorConfig down_config = (ContentIndicatorConfig) {
+    .layer = s_indicator_down_layer,
+    .times_out = true,
+    .alignment = GAlignCenter,
+    .colors = {
+      .foreground = GColorWhite,
+      .background = COLOR_FALLBACK(GColorDarkCandyAppleRed, GColorBlack)
+    }
+  };
+  content_indicator_configure_direction(s_indicator_down, ContentIndicatorDirectionDown,
+                                        &down_config);
+
+  content_indicator_set_content_available(s_indicator_down, ContentIndicatorDirectionDown, true);
+  content_indicator_set_content_available(s_indicator_up, ContentIndicatorDirectionUp, false);
 }
 
 static void window_unload(Window* window) {
@@ -161,6 +200,9 @@ static void do_transition(void) {
 
   transition_animation_implementation.update = transition_animation_update;
   transition_animation_run(ANIMATION_DURATION, 0, &transition_animation_implementation, true);
+
+  content_indicator_set_content_available(s_indicator_down, ContentIndicatorDirectionDown, s_app_position < (app_info_count - 1));
+  content_indicator_set_content_available(s_indicator_up, ContentIndicatorDirectionUp, s_app_position > 0);
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {

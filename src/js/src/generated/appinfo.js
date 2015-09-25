@@ -40,7 +40,7 @@ module.exports = {
   "shortName": "Hearts",
   "longName": "Hearts",
   "companyName": "Matthew Tole",
-  "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "targetPlatforms": ["basalt", "chalk"],
   "sdkVersion": "3",
   "versionCode": 1,
   "versionLabel": "5.0",
