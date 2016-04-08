@@ -6,3 +6,4 @@ src/js/coverage/
 .lock-*
 npm-debug.log
 *.pyc
+.DS_Store
