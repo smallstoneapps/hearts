@@ -2,43 +2,11 @@
 # or reproduced in your own projects.
 #
 #
-# Hearts Pebble App v5.1
+# This file is the default set of rules to compile a Pebble application.
 #
-# ----------------------
+# Feel free to customize this to your needs.
 #
-# The MIT License (MIT)
-#
-# Copyright © 2013 - 2015 Matthew Tole
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
-# --------------------
-#
-# wscript
-#
-
-import json
-import datetime
-import os
-from sh import make
-import rockit
-import sh
+import os.path
 
 top = '.'
 out = 'build'
@@ -49,159 +17,36 @@ def options(ctx):
 
 
 def configure(ctx):
+    """
+    This method is used to configure your build.
+    ctx.load(`pebble_sdk`) automatically configures a build for each valid platform in `targetPlatforms`.
+    Platform-specific configuration: add your change after calling ctx.load('pebble_sdk') and make sure to set the
+    correct environment first.
+    Universal configuration: add your change prior to calling ctx.load('pebble_sdk').
+    """
     ctx.load('pebble_sdk')
-
-
-def distclean(ctx):
-    ctx.load('pebble_sdk')
-    try:
-        os.remove('../src/js/pebble-js-app.js')
-        os.remove('../src/js/src/generated/appinfo.js')
-        os.remove('../src/generated/appinfo.h')
-    except OSError:
-        pass
 
 
 def build(ctx):
     ctx.load('pebble_sdk')
 
-    js_libs = [
-        '../src/js/libs/superagent.js',
-        '../src/js/libs/message-queue.js',
-        '../src/js/libs/gcolor.js',
-        '../src/js/libs/store.js',
-        '../src/js/libs/sprintf.js'
-    ]
+    build_worker = os.path.exists('worker_src')
+    binaries = []
 
-    js_sources = [
-        '../src/js/src/generated/appinfo.js',
-        '../src/js/src/hacks.js',
-        '../src/js/src/main.js'
-    ]
-    if os.path.isfile('src/js/src/debug.js'):
-        js_sources.insert(0, '../src/js/src/debug.js');
+    cached_env = ctx.env
+    for platform in ctx.env.TARGET_PLATFORMS:
+        ctx.env = ctx.all_envs[platform]
+        ctx.set_group(ctx.env.PLATFORM_NAME)
+        app_elf = '{}/pebble-app.elf'.format(ctx.env.BUILD_DIR)
+        ctx.pbl_program(source=ctx.path.ant_glob('src/**/*.c'), target=app_elf)
 
-    built_js = '../src/js/pebble-js-app.js'
+        if build_worker:
+            worker_elf = '{}/pebble-worker.elf'.format(ctx.env.BUILD_DIR)
+            binaries.append({'platform': p, 'app_elf': app_elf, 'worker_elf': worker_elf})
+            ctx.pbl_worker(source=ctx.path.ant_glob('worker_src/**/*.c'), target=worker_elf)
+        else:
+            binaries.append({'platform': platform, 'app_elf': app_elf})
+    ctx.env = cached_env
 
-    # Generate appinfo.js
-    ctx(rule=generate_appinfo_js, source='../appinfo.json',
-        target='../src/js/src/generated/appinfo.js')
-
-    # Generate appinfo.h
-    ctx(rule=generate_appinfo_h, source='../appinfo.json',
-        target='../src/generated/appinfo.h')
-
-    # Run the C tests.
-    ctx(rule=make_test)
-
-    # Run ESLint on all the JavaScript files
-    ctx(rule=js_eslint, source=js_sources)
-
-    # Run the suite of JS tests.
-    # ctx(rule=js_karma)
-
-    # Combine the source JS files into a single JS file.
-    ctx(rule=concatenate_js,
-        source=js_sources,
-        target=built_js)
-
-    # Use Rockit to build the app
-    rockit.build(ctx, built_js)
-
-
-def generate_appinfo_h(task):
-    task.ext_out = '.c'
-
-    src = task.inputs[0].abspath()
-    target = task.outputs[0].abspath()
-    appinfo = json.load(open(src))
-
-    f = open(target, 'w')
-    write_comment_header(f, 'src/generated/appinfo.h', appinfo)
-    f.write('#pragma once\n\n')
-    f.write('#define VERSION_LABEL "{0}"\n'.format(appinfo['versionLabel']))
-    f.write('#define UUID "{0}"\n'.format(appinfo['uuid']))
-    for key in appinfo['appKeys']:
-        f.write('#define APP_KEY_{0} {1}\n'.format(key.upper(),
-                                                   appinfo['appKeys'][key]))
-    f.close()
-
-
-def generate_appinfo_js(task):
-    src = task.inputs[0].abspath()
-    target = task.outputs[0].abspath()
-    data = open(src).read().strip()
-    appinfo = json.load(open(src))
-
-    f = open(target, 'w')
-    write_comment_header(f, 'src/js/src/generated/appinfo.js', appinfo)
-    f.write('/* exported AppInfo */\n\n')
-    f.write('module.exports = ')
-    f.write(data)
-    f.write(';')
-    f.close()
-
-
-# Function to write the comment header for both the C and JS generated files.
-# Thank goodness that they have the same comment syntax!
-def write_comment_header(f, filename, appinfo):
-    f.write("""/*
-
-Hearts Pebble App v{0}
-
-----------------------
-
-The MIT License (MIT)
-
-Copyright © {1} Matthew Tole
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
---------------------
-
-{2}
-
-*/
-
-
-""".format(appinfo['versionLabel'], datetime.datetime.now().year, filename))
-
-
-def concatenate_js(task):
-    task.ext_out = '.js'
-
-    browserify = sh.Command("./node_modules/.bin/browserify")
-    browserify(task.inputs[-1].abspath(), o=task.outputs[0].abspath())
-
-
-def make_test(task):
-    make()
-
-
-def js_eslint(task):
-    task.ext_out = '.js'
-
-    make('lint')
-
-
-def js_karma(task):
-    task.ext_out = '.js'
-
-    karma = sh.Command("./node_modules/.bin/karma")
-    karma("start", single_run=True, reporters="dots")
+    ctx.set_group('bundle')
+    ctx.pbl_bundle(binaries=binaries, js=ctx.path.ant_glob(['src/js/**/*.js', 'src/js/**/*.json', 'package.json']), js_entry_file='src/js/app.js')

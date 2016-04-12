@@ -34,7 +34,7 @@ src/windows/win-main.c
 
 
 #include <pebble.h>
-#include <pebble-assist.h>
+#include "pebble-assist/pebble-assist.h"
 #include "win-main.h"
 #include "../app-info.h"
 

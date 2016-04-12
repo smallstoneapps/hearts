@@ -18,7 +18,7 @@ static char* all_tests() {
 
 int main(int argc, char **argv) {
   printf("%s-----------------------------------------\n", KCYN);
-  printf(" Running Test Suite for MountainPass %s%s%s \n", KYEL, VERSION_LABEL, KCYN);
+  printf(" Running Test Suite for Hearts %s%s%s \n", KYEL, VERSION_LABEL, KCYN);
   printf("-----------------------------------------\n%s", KNRM);
   char* result = all_tests();
   if (0 != result) {

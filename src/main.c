@@ -34,11 +34,11 @@ src/main.c
 
 
 #include <pebble.h>
-#include <pebble-assist.h>
-#include <message-queue.h>
-#include <data-processor.h>
-#include "windows/win-setup.h"
-#include "windows/win-loading.h"
+#include "pebble-assist/pebble-assist.h"
+#include "pebble-message-queue/message-queue.h"
+#include "pebble-data-processor/data-processor.h"
+#include "pebble-loading-screen/setup-screen.h"
+#include "pebble-loading-screen/loading-screen.h"
 #include "windows/win-main.h"
 #include "app-info.h"
 
@@ -88,7 +88,7 @@ static void deinit(void) {
 
 static void message_handler_setup(char* operation, char* data) {
   persist_write_bool(PERSIST_KEY_CONFIGURED, true);
-  if (win_setup_visible()) {
+  if (win_setup_is_visible()) {
     win_loading_show();
     win_setup_hide();
   }

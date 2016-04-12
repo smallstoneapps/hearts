@@ -1,6 +1,6 @@
 {
-  "name": "hearts-pebble",
-  "version": "5.1.0",
+  "name": "hearts",
+  "version": "6.0.0",
   "description": "Hearts app for the Pebble smartwatch",
   "private": true,
   "main": "src/js/src/main.js",
@@ -30,8 +30,37 @@
   },
   "dependencies": {
     "message-queue-pebble": "^1.0.0",
+    "pebble-assist": "^1.0.0",
+    "pebble-data-processor": "^2.0.0",
+    "pebble-loading-screen": "^1.0.0",
+    "pebble-message-queue": "^2.0.2",
     "sprintf-js": "^1.0.3",
     "store": "^1.3.17",
     "superagent": "^1.4.0"
+  },
+  "pebble": {
+    "uuid": "bcdef00a-b309-485d-b82f-341307693c73",
+    "shortName": "Hearts",
+    "longName": "Hearts",
+    "companyName": "Matthew Tole",
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk"
+    ],
+    "sdkVersion": "3",
+    "versionCode": 1,
+    "versionLabel": "5.1",
+    "watchapp": {
+      "watchface": false
+    },
+    "enableMultiJS": true,
+    "capabilities": [
+      "configurable"
+    ],
+    "settings": {
+      "configUrl": "http://smallstoneapps.s3.amazonaws.com/hearts/config/index.html?version=%s",
+      "apiUrl": "http://pblweb.com/api/v1/store/developers/%s.json"
+    }
   }
 }

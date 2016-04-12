@@ -35,7 +35,7 @@ src/js/src/main.js
 'use strict';
 
 var superagent = require('superagent');
-var AppInfo = require('./generated/appinfo');
+var AppInfo = require('../appinfo.json');
 var sprintf = require('sprintf-js').sprintf;
 var store = require('store');
 require('./hacks');
