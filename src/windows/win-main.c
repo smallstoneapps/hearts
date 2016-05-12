@@ -1,5 +1,5 @@
 #include <pebble.h>
-#include "pebble-assist/pebble-assist.h"
+#include "@smallstoneapps/utils/macros.h"
 #include "win-main.h"
 #include "../app-info.h"
 

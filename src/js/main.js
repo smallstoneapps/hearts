@@ -1,22 +1,26 @@
 'use strict';
 
-var superagent = require('superagent');
-var AppInfo = require('../appinfo.json');
+var xhr = require('xhr');
+var AppInfo = require('../../package.json');
 var sprintf = require('sprintf-js').sprintf;
 var store = require('store');
 require('./hacks');
 
-Pebble.addEventListener('ready', function() {
+Pebble.addEventListener('ready', () => {
   var msg = {
     group: 'BOOT',
     operation: 'BOOT',
     data: 'BOOT'
   };
-  Pebble.sendAppMessage(msg, function() {
-    boot();
-  }, function() {
-    console.log('Boot message failed!');
-  });
+  try {
+    Pebble.sendAppMessage(msg, () => {
+      boot();
+    }, () => {
+      console.log('Boot message failed!');
+    });
+  } catch (ex) {
+    console.error(ex);
+  }
 });
 
 Pebble.addEventListener('appmessage', function(event) {
@@ -24,7 +28,7 @@ Pebble.addEventListener('appmessage', function(event) {
 });
 
 Pebble.addEventListener('showConfiguration', function() {
-  Pebble.openURL(sprintf(AppInfo.settings.configUrl, AppInfo.versionLabel));
+  Pebble.openURL(sprintf(AppInfo.pebble.settings.configUrl, AppInfo.version));
 });
 
 Pebble.addEventListener('webviewclosed', function(event) {
@@ -37,6 +41,8 @@ Pebble.addEventListener('webviewclosed', function(event) {
 });
 
 function boot() {
+  store.set('developerId', '5283d2a9c0b0168bf6000001');
+  console.log(store.get('developerId'));
   if (store.get('developerId')) {
     sendIsConfigured();
     updateHearts(store.get('developerId'), sendHearts);
@@ -67,13 +73,14 @@ function sendHearts(err, data) {
 }
 
 function updateHearts(developerId, callback) {
-  var url = sprintf(AppInfo.settings.apiUrl, developerId);
-  superagent(url, function(err, res) {
+  var url = sprintf(AppInfo.pebble.settings.apiUrl, developerId);
+  xhr({ uri: url }, function(err, data, xhr) {
     if (err) {
       return callback(err);
     }
-    var dataArray = [res.body.length];
-    res.body.sort(function(app1, app2) {
+    const hearts = JSON.parse(data.body);
+    var dataArray = [hearts.length];
+    hearts.sort(function(app1, app2) {
       if (app1.hearts > app2.hearts) {
         return -1;
       } else if (app1.hearts < app2.hearts) {
@@ -81,7 +88,7 @@ function updateHearts(developerId, callback) {
       }
       return (app1.title < app2.title ? -1 : 1);
     });
-    res.body.forEach(function(app) {
+    hearts.forEach(function(app) {
       dataArray.push(app.title);
       dataArray.push(app.hearts);
     });
