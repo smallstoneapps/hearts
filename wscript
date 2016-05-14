@@ -49,8 +49,6 @@ def build(ctx):
     ctx.env = cached_env
 
     ctx.set_group('bundle')
+    ctx(rule='../node_modules/.bin/eslint ../src/js/**/*.js', source=ctx.path.ant_glob('src/**/*.js'))
     ctx(rule='../node_modules/.bin/browserify ../src/js/main.js -o ${TGT} -t [ babelify --presets [ es2015 ] ]', source=ctx.path.ant_glob('src/**/*.js'), target='pebble-js-app.js')
     ctx.pbl_bundle(binaries=binaries, js='pebble-js-app.js')
-    # ctx.pbl_bundle(binaries=binaries,
-    #                js=ctx.path.ant_glob(['src/js/**/*.js', 'src/js/**/*.json']),
-    #                js_entry_file='src/js/main.js')
