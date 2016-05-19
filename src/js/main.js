@@ -4,6 +4,7 @@ const xhr = require('xhr');
 const AppInfo = require('../../package.json');
 const sprintf = require('sprintf-js').sprintf;
 const store = require('store');
+const MessageQueue = require('message-queue-pebble');
 
 Pebble.addEventListener('ready', () => {
   const msg = {
@@ -11,7 +12,7 @@ Pebble.addEventListener('ready', () => {
     operation: 'BOOT',
     data: 'BOOT'
   };
-  Pebble.sendAppMessage(msg, () => {
+  MessageQueue.sendAppMessage(msg, () => {
     boot();
   }, nack);
 });
@@ -47,14 +48,14 @@ function sendIsConfigured() {
     operation: 'SETUP',
     data: 'SETUP'
   };
-  Pebble.sendAppMessage(msg, ack, nack);
+  MessageQueue.sendAppMessage(msg, ack, nack);
 }
 
 function sendHearts(err, data) {
   if (err) {
     return console.log(err);
   }
-  Pebble.sendAppMessage({
+  MessageQueue.sendAppMessage({
     group: 'HEARTS',
     operation: 'UPDATE',
     data: data.join('^')
