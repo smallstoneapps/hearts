@@ -1,36 +1,30 @@
 'use strict';
 
-var xhr = require('xhr');
-var AppInfo = require('../../package.json');
-var sprintf = require('sprintf-js').sprintf;
-var store = require('store');
+const xhr = require('xhr');
+const AppInfo = require('../../package.json');
+const sprintf = require('sprintf-js').sprintf;
+const store = require('store');
 
 Pebble.addEventListener('ready', () => {
-  var msg = {
+  const msg = {
     group: 'BOOT',
     operation: 'BOOT',
     data: 'BOOT'
   };
-  try {
-    Pebble.sendAppMessage(msg, () => {
-      boot();
-    }, () => {
-      console.log('Boot message failed!');
-    });
-  } catch (ex) {
-    console.error(ex);
-  }
+  Pebble.sendAppMessage(msg, () => {
+    boot();
+  }, nack);
 });
 
-Pebble.addEventListener('appmessage', function(event) {
+Pebble.addEventListener('appmessage', (event) => {
   console.log(JSON.stringify(event.data));
 });
 
-Pebble.addEventListener('showConfiguration', function() {
+Pebble.addEventListener('showConfiguration', () => {
   Pebble.openURL(sprintf(AppInfo.pebble.settings.configUrl, AppInfo.version));
 });
 
-Pebble.addEventListener('webviewclosed', function(event) {
+Pebble.addEventListener('webviewclosed', (event) => {
   if (event.response === 'CANCELLED') {
     return;
   }
@@ -48,12 +42,12 @@ function boot() {
 }
 
 function sendIsConfigured() {
-  var msg = {
+  const msg = {
     group: 'SETUP',
     operation: 'SETUP',
     data: 'SETUP'
   };
-  Pebble.sendAppMessage(msg, function() {}, function() {});
+  Pebble.sendAppMessage(msg, ack, nack);
 }
 
 function sendHearts(err, data) {
@@ -64,20 +58,18 @@ function sendHearts(err, data) {
     group: 'HEARTS',
     operation: 'UPDATE',
     data: data.join('^')
-  },
-    function() {},
-    function() {});
+  }, ack, nack);
 }
 
 function updateHearts(developerId, callback) {
-  var url = sprintf(AppInfo.pebble.settings.apiUrl, developerId);
-  xhr({ uri: url }, function(err, data, xhr) {
+  const url = sprintf(AppInfo.pebble.settings.apiUrl, developerId);
+  xhr({ uri: url }, (err, data, xhr) => {
     if (err) {
       return callback(err);
     }
     const hearts = JSON.parse(data.body);
-    var dataArray = [hearts.length];
-    hearts.sort(function(app1, app2) {
+    const dataArray = [hearts.length];
+    hearts.sort((app1, app2) => {
       if (app1.hearts > app2.hearts) {
         return -1;
       } else if (app1.hearts < app2.hearts) {
@@ -85,10 +77,18 @@ function updateHearts(developerId, callback) {
       }
       return (app1.title < app2.title ? -1 : 1);
     });
-    hearts.forEach(function(app) {
+    hearts.forEach((app) => {
       dataArray.push(app.title);
       dataArray.push(app.hearts);
     });
     callback(null, dataArray);
   });
+}
+
+function ack() {
+  console.log('ACK');
+}
+
+function nack() {
+  console.error('NACK!');
 }

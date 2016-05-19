@@ -2,5 +2,25 @@
   "extends": "pebble",
   "globals": {
     "Pebble": true
+  },
+  "rules": {
+    "no-var": 2,
+    "prefer-const": 2,
+    "arrow-parens": [2, "always"],
+    "arrow-body-style": [2, "as-needed"],
+    "prefer-arrow-callback": 2,
+    "valid-jsdoc": [1, {
+      "prefer": {
+        "return": "returns"
+      }
+    }],
+    "max-len": [2, 85, 4, {"ignoreUrls": true}],
+    "require-jsdoc": [1, {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true
+      }
+    }]
   }
 }
