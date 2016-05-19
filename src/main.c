@@ -6,7 +6,6 @@
 #include "@smallstoneapps/loading-screen/loading-screen.h"
 #include "windows/win-main.h"
 #include "app-info.h"
-#include "message_keys.h"
 
 
 #define PERSIST_KEY_CONFIGURED 10
