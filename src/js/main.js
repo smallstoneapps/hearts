@@ -4,7 +4,6 @@ var xhr = require('xhr');
 var AppInfo = require('../../package.json');
 var sprintf = require('sprintf-js').sprintf;
 var store = require('store');
-require('./hacks');
 
 Pebble.addEventListener('ready', () => {
   var msg = {
@@ -41,8 +40,6 @@ Pebble.addEventListener('webviewclosed', function(event) {
 });
 
 function boot() {
-  store.set('developerId', '5283d2a9c0b0168bf6000001');
-  console.log(store.get('developerId'));
   if (store.get('developerId')) {
     sendIsConfigured();
     updateHearts(store.get('developerId'), sendHearts);
