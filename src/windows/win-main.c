@@ -4,7 +4,7 @@
 #include "../app-info.h"
 
 
-#ifdef PBL_SDK_3
+#ifndef PBL_SDK_2
 #define FONT_COUNT FONT_KEY_LECO_42_NUMBERS
 #else
 #define FONT_COUNT FONT_KEY_BITHAM_42_MEDIUM_NUMBERS
@@ -49,7 +49,7 @@ static uint8_t s_animation_direction;
 static uint16_t s_dot_current_x = 0;
 static GSize s_window_size;
 
-#ifdef PBL_SDK_3
+#ifndef PBL_SDK_2
 static Layer* s_indicator_up_layer;
 static Layer* s_indicator_down_layer;
 static ContentIndicator* s_indicator_up;
@@ -64,9 +64,9 @@ void win_main_init(void) {
     .unload = window_unload
   });
   window_set_click_config_provider(s_window, click_config_provider);
-  #ifdef PBL_SDK_2
+#ifdef PBL_SDK_2
   window_set_fullscreen(s_window, true);
-  #endif
+#endif
 }
 
 void win_main_deinit(void) {
@@ -111,8 +111,7 @@ static void window_load(Window* window) {
   layer_set_update_proc(s_layer_dots, layer_update_dots);
   layer_add_to_window(s_layer_dots, window);
 
-#ifdef PBL_SDK_3
-
+#ifndef PBL_SDK_2
   s_indicator_up_layer = layer_create(GRect(0, 0,
     s_window_size.w, STATUS_BAR_LAYER_HEIGHT));
   s_indicator_down_layer = layer_create(GRect(0, s_window_size.h - STATUS_BAR_LAYER_HEIGHT,
@@ -172,7 +171,7 @@ static void do_transition(void) {
   transition_animation_implementation.update = transition_animation_update;
   transition_animation_run(ANIMATION_DURATION, 0, &transition_animation_implementation, true);
 
-#ifdef PBL_SDK_3
+#ifndef PBL_SDK_2
   content_indicator_set_content_available(s_indicator_down, ContentIndicatorDirectionDown, s_app_position < (app_info_count - 1));
   content_indicator_set_content_available(s_indicator_up, ContentIndicatorDirectionUp, s_app_position > 0);
 #endif
@@ -243,9 +242,9 @@ static uint16_t dot_center_x(uint8_t pos) {
 static void layer_update_dots(Layer* layer, GContext* ctx){
   graphics_context_set_stroke_color(ctx, GColorWhite);
   graphics_context_set_fill_color(ctx, GColorWhite);
-  #ifdef PBL_SDK_3
+#ifndef PBL_SDK_2
   graphics_context_set_stroke_width(ctx, 3);
-  #endif
+#endif
 
   if (s_is_animating) {
     graphics_fill_circle(ctx, GPoint(s_dot_current_x, 6), 4);

@@ -8,9 +8,9 @@ const MessageQueue = require('message-queue-pebble');
 
 Pebble.addEventListener('ready', () => {
   const msg = {
-    group: 'BOOT',
-    operation: 'BOOT',
-    data: 'BOOT'
+    GROUP: 'BOOT',
+    OPERATION: 'BOOT',
+    DATA: 'BOOT'
   };
   MessageQueue.sendAppMessage(msg, () => {
     boot();
@@ -18,7 +18,7 @@ Pebble.addEventListener('ready', () => {
 });
 
 Pebble.addEventListener('appmessage', (event) => {
-  console.log(JSON.stringify(event.data));
+  console.log(JSON.stringify(event.GROUP));
 });
 
 Pebble.addEventListener('showConfiguration', () => {
@@ -44,9 +44,9 @@ function boot() {
 
 function sendIsConfigured() {
   const msg = {
-    group: 'SETUP',
-    operation: 'SETUP',
-    data: 'SETUP'
+    GROUP: 'SETUP',
+    OPERATION: 'SETUP',
+    DATA: 'SETUP'
   };
   MessageQueue.sendAppMessage(msg, ack, nack);
 }
@@ -56,9 +56,9 @@ function sendHearts(err, data) {
     return console.log(err);
   }
   MessageQueue.sendAppMessage({
-    group: 'HEARTS',
-    operation: 'UPDATE',
-    data: data.join('^')
+    GROUP: 'HEARTS',
+    OPERATION: 'UPDATE',
+    DATA: data.join('^')
   }, ack, nack);
 }
 

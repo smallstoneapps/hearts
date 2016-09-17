@@ -1,6 +1,6 @@
 {
   "name": "hearts",
-  "version": "6.0",
+  "version": "6.0.0",
   "description": "Hearts app for the Pebble smartwatch",
   "private": true,
   "main": "src/js/src/main.js",
@@ -12,8 +12,7 @@
     "url": "https://github.com/smallstoneapps/hearts.git"
   },
   "keywords": [
-    "pebble",
-    "smartwatch"
+    "pebble-app"
   ],
   "author": "Matthew Tole <pebble@matthewtole.com>",
   "license": "MIT",
@@ -31,10 +30,10 @@
     "karma": "^0.13.10"
   },
   "dependencies": {
-    "@smallstoneapps/data-processor": "^2.0.1",
-    "@smallstoneapps/loading-screen": "^2.1.0",
-    "@smallstoneapps/message-queue": "^2.1.0",
-    "@smallstoneapps/utils": "^1.1.1",
+    "@smallstoneapps/data-processor": "^2.1.0",
+    "@smallstoneapps/loading-screen": "^2.2.0",
+    "@smallstoneapps/message-queue": "^2.4.0",
+    "@smallstoneapps/utils": "^1.2.0",
     "message-queue-pebble": "^1.0.0",
     "sprintf-js": "^1.0.3",
     "store": "^1.3.20",
@@ -42,13 +41,12 @@
   },
   "pebble": {
     "uuid": "bcdef00a-b309-485d-b82f-341307693c73",
-    "shortName": "Hearts",
-    "longName": "Hearts",
-    "companyName": "Matthew Tole",
+    "displayName": "Hearts",
     "targetPlatforms": [
       "aplite",
       "basalt",
-      "chalk"
+      "chalk",
+      "diorite"
     ],
     "sdkVersion": "3",
     "versionCode": 1,
