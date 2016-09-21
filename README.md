@@ -2,11 +2,8 @@
 
 [![Tests Status](https://img.shields.io/travis/smallstoneapps/hearts.svg?style=flat-square&label=tests)][travis] [![Version 6.0.0](https://img.shields.io/badge/version-6.0.0-blue.svg?style=flat-square)][appstore]
 
-
 Keep track of how much people are loving your apps on the Pebble appstore with
 this app.
-
-[![Available on the Pebble appstore](http://pblweb.com/badge/530be07a7cd17c954e000049/white/medium/)][appstore]
 
 --
 
@@ -18,4 +15,3 @@ this app.
 
 [appstore]: https://apps.getpebble.com/applications/530be07a7cd17c954e000049
 [travis]: https://travis-ci.org/smallstoneapps/hearts/
-[download-pbw]: https://github.com/smallstoneapps/hearts/releases/download/v6.0.0/hearts.pbw
